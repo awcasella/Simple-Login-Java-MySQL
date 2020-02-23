@@ -19,13 +19,15 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
+        // Setting logo con
         ImageIcon myimage = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("shield.png")));
         Image img1 = myimage.getImage();
         Image img2 = img1.getScaledInstance(this.Logo.getWidth(), this.Logo.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon i = new ImageIcon(img2);
-        
         this.Logo.setIcon(i);
         
+        // Establishing connection
         try{
             System.out.println("Connecting to database...");
             Class.forName("com.mysql.jdbc.Driver");   
@@ -33,10 +35,9 @@ public class Login extends javax.swing.JFrame {
             this.statement = connect.createStatement();
             System.out.println("Connection established!");
             
-        }catch (SQLException e) {   
+        } catch (SQLException e) {   
             e.printStackTrace();   
-        }   
-        catch (ClassNotFoundException e) {   
+        } catch (ClassNotFoundException e) {   
             e.printStackTrace();   
         }   
     }
@@ -56,6 +57,7 @@ public class Login extends javax.swing.JFrame {
         Logo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        bt_add = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -81,6 +83,13 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Password:");
 
+        bt_add.setText("Add New User");
+        bt_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_addActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,14 +104,16 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(pf_password, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                     .addComponent(tf_user))
                 .addGap(99, 99, 99))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(173, 173, 173)
-                .addComponent(bt_login, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(170, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(172, Short.MAX_VALUE)
                 .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(171, 171, 171))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(173, 173, 173)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bt_login, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bt_add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +130,9 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(bt_login)
-                .addGap(99, 99, 99))
+                .addGap(31, 31, 31)
+                .addComponent(bt_add)
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -162,10 +175,17 @@ public class Login extends javax.swing.JFrame {
         }
         System.out.println("Connection ended!");
     }//GEN-LAST:event_formWindowClosing
+
+    private void bt_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_addActionPerformed
+        this.dispose();
+        NewUser newUser = new NewUser();
+        newUser.setVisible(true);
+    }//GEN-LAST:event_bt_addActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Logo;
+    private javax.swing.JButton bt_add;
     private javax.swing.JButton bt_login;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
