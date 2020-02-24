@@ -1,22 +1,17 @@
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 
 public class Login extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Login
-     */
+    
     public Login() {
         initComponents();
         
@@ -28,18 +23,8 @@ public class Login extends javax.swing.JFrame {
         this.Logo.setIcon(i);
         
         // Establishing connection
-        try{
-            System.out.println("Connecting to database...");
-            Class.forName("com.mysql.jdbc.Driver");   
-            this.connect = DriverManager.getConnection("jdbc:mysql://localhost/login", "root", "");   
-            this.statement = connect.createStatement();
-            System.out.println("Connection established!");
-            
-        } catch (SQLException e) {   
-            e.printStackTrace();   
-        } catch (ClassNotFoundException e) {   
-            e.printStackTrace();   
-        }   
+        this.factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
+        
     }
 
     /**
@@ -140,39 +125,27 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_loginActionPerformed
-        String user = this.tf_user.getText();
+        String username = this.tf_user.getText();
         String password = this.pf_password.getText();
-        String userDB = null;
-        String passwordDB = null;
-        String query = "Select username, password from login";
-        try{
-            ResultSet resultSet = this.statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                // Now we can fetch the data by column name, save and use them!
-                userDB = resultSet.getString("username");
-                passwordDB = resultSet.getString("password");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if(user.equals(userDB) && password.equals(passwordDB)){
+        
+        Session session = this.factory.getCurrentSession();
+        session.beginTransaction();
+        
+        User user = session.get(User.class, username);
+        
+        if(username.equals(user.getUsername()) && password.equals(user.getPassword())){
             JOptionPane.showMessageDialog(null, "Connected",  "Status", JOptionPane.INFORMATION_MESSAGE);
             //System.out.println("Connected");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Not connected", "Status", JOptionPane.WARNING_MESSAGE);
             //System.out.println("Not connected!");
         }
+        session.getTransaction().commit();
     }//GEN-LAST:event_bt_loginActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         System.out.println("Connection will be ended!");
-        try {
-            this.connect.close();
-            this.statement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.factory.close();
         System.out.println("Connection ended!");
     }//GEN-LAST:event_formWindowClosing
 
@@ -192,6 +165,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField pf_password;
     private javax.swing.JTextField tf_user;
     // End of variables declaration//GEN-END:variables
-    Connection connect;
-    Statement statement = null;
+
+    SessionFactory factory;
 }
