@@ -26,7 +26,11 @@ Installation of XAMPP for MySQL and Java
 
 - XAMPP installation tutorial can be found in [here](https://www.edivaldobrito.com.br/como-instalar-o-xampp-no-linux/).
 
-- ORACLE Java installation tutorial can be found [here](https://www.edivaldobrito.com.br/oracle-java-no-ubuntu-18-04-lts/).
+**Java Installation**
+
+    $ sudo apt install default-jre
+    
+    $ sudo apt install default-jdk
 
 Run project
 Open XAMPP and start MySQL Database and Apache Web Server. 
